@@ -7,7 +7,7 @@
 
 from collections import deque
 from typing import List, Self, Tuple
-from engine.merkle_trees.DiffResult import DiffResult
+from engine.merkle_tree.DiffResult import DiffResult
 import hashlib
 
 # Node structure representing a Merkle node (leaf or internal).
@@ -232,6 +232,7 @@ class MerkleTree():
     # Append a single leaf (full rebuild version): appends to self.data, rebuilds the tree/levels,
     # updates size, and returns the new leaf Node (last element of the leaf level).
     # This is simple and correct; an O(log N) incremental version can replace it later.
+    # TODO: implement in log n time (i got lazy, there has to be a way)
     def append_leaf(self, new_str: str) -> Node:
         self.data.append(new_str)
         self.tree = self.init_merkle_tree()
@@ -247,5 +248,4 @@ class MerkleTree():
         self.tree = self.init_merkle_tree()
         self.size = len(self.data)
         return self.levels[-1][start:]
-
         
