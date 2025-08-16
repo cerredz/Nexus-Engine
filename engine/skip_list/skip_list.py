@@ -301,7 +301,6 @@ class SkipList():
 			else:
 				break
 
-
 		res = []
 		curr = self.layers[0][0]
 		while curr and curr.right and curr.right != node:
