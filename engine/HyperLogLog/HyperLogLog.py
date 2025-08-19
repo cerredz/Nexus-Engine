@@ -13,6 +13,7 @@ class HyperLogLog():
         self.sum = float(self.m)  # Σ 2^{-M[i]} with all M[i]=0 -> m
         self.harmonic_mean = self.m / self.sum
         self.zero_buckets = self.m  # track zero registers for small-range correction
+        
         if self.m == 16:
             self.HYPERLOGLOG_CONSTANT = 0.673
         elif self.m == 32:
@@ -81,6 +82,7 @@ class HyperLogLog():
         if E <= 2.5 * self.m and self.zero_buckets > 0:
             return self.m * math.log(self.m / self.zero_buckets)
         return E
+    
 
 def _rse(m):
     return 1.04 / math.sqrt(m)
