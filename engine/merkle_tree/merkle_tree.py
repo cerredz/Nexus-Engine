@@ -7,7 +7,7 @@
 
 from collections import deque
 from typing import List, Self, Tuple
-from engine.merkle_tree.DiffResult import DiffResult
+from .DiffResult import DiffResult
 import hashlib
 
 # Node structure representing a Merkle node (leaf or internal).
