@@ -33,7 +33,7 @@ from bisect import bisect_left
 class SlidingWindow():
     valid_units = ['second', 'minute', 'hour', 'day']
     MIN_WINDOW = 1
-    MAX_WINDOW = 100000
+    MAX_WINDOW = 10000000
 
     # Initialize a sliding-window limiter.
     # - unit: one of valid_units ('second'|'minute'|'hour'|'day')
@@ -77,7 +77,7 @@ class SlidingWindow():
     # Validate window bounds [MIN_WINDOW, MAX_WINDOW]; raises ValueError otherwise.
     def __validate_window(self, window):
         if window < SlidingWindow.MIN_WINDOW or window > SlidingWindow.MAX_WINDOW:
-            raise ValueError("Invalid window, keep between 1 and 100,000")
+            raise ValueError("Invalid window, keep between 1 and 10,000,000")
         
         return window
         
@@ -166,7 +166,7 @@ class SlidingWindow():
     
     # Returns a list of keys considered "bad actors": those with denied > allowed
     # according to per-key user_metrics. O(number_of_keys).
-    def get_bad_actors(self):
+    def bad_actors(self):
         res = []
         for key, value in self.user_metrics.items():
             allowed, denied = value

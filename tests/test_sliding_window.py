@@ -2,11 +2,9 @@ import sys
 sys.path.append("engine")
 from rate_limiting.SlidingWindow import SlidingWindow
 
-
 def _stub_time(limiter: SlidingWindow, now_box):
     # Replace the private time getter with a deterministic stub.
     limiter._SlidingWindow__get_time = lambda: now_box[0]
-
 
 def test_allow_under_limit_and_denies_at_limit():
     sw = SlidingWindow('second', 1, 3)
@@ -114,7 +112,7 @@ def test_get_bad_actors():
     assert not sw.allow('bad')
     assert not sw.allow('bad')
 
-    bads = set(sw.get_bad_actors())
+    bads = set(sw.bad_actors())
     assert 'bad' in bads
     assert 'good' not in bads
 
