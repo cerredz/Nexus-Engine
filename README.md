@@ -5,4 +5,6 @@ background task sceguler + executer,
 
 image processing (resize, format conversion, uploads, metadata)
 
+adjacency matrix, disjoint set union, radix tree
+
 
