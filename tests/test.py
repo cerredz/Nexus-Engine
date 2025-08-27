@@ -1,6 +1,12 @@
 import importlib
 import os
+import sys
 import traceback
+
+# Ensure project root is on sys.path so tests can import the `engine` package
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
 def run_all_tests():
     test_dir = os.path.dirname(__file__)

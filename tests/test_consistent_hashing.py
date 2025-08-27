@@ -3,7 +3,6 @@ sys.path.append("engine")
 from ConsistentHashing.ConsistentHashing import ConsistentHashing
 import random
 
-
 class TestableConsistentHashing(ConsistentHashing):
     """Subclass creating a deterministic ring without calling buggy parent __init__."""
     def __init__(self, servers=2, virtual_nodes=2, db=False):
@@ -20,7 +19,6 @@ class TestableConsistentHashing(ConsistentHashing):
             0: [set([0, 2]), 2],
             1: [set([1, 3]), 3],
         }
-
 
 def test_init_invalid_values():
     # servers == 0
