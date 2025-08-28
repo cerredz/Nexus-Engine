@@ -1,0 +1,21 @@
+Recommended high-level categories (more general than individual techniques)
+Systems primitives: foundational building blocks used across systems (timers, clocks, hashing, randomness).
+Concurrency & synchronization: locks, semaphores, queues/channels, barriers, atomics.
+Distributed systems & consistency: replication, consensus/ordering, versioning, conflict resolution.
+Reliability & resilience: circuit breaking, retries/backoff, timeouts, bulkheads, hedging, fallbacks.
+Storage & persistence: logs, indexing, B/B+ trees, LSM components, snapshots, compaction.
+Indexing & search: inverted indexes, ranking, fuzzy/approximate match, compression codecs for postings.
+Approximate/streaming analytics: sketches (HLL, CMS), sampling, sliding windows, quantiles.
+Resource management & control: rate limiting, quotas, admission control, load shedding, prioritization.
+Scheduling & work orchestration: priority queues, fair schedulers, task/deque models, backpressure.
+Text & document structures: editors (rope, piece table), diff/merge, operational transforms, CRDTs.
+Networking & IPC: RPC patterns, batching/coalescing, retries, idempotency keys, request shaping.
+Security & cryptography: hashing, signing, key derivation, integrity trees, authN/Z scaffolding.
+Observability & diagnostics: metrics, tracing, logging, histograms/t-digest, health checks.
+Performance & optimization: caching, eviction strategies, memory pools, profiling utilities.
+Serialization & data formats: binary encodings, varints/delta, schema evolution, zero-copy views.
+Time series & temporal: windows, aggregations, clocks, calendar logic, timers/schedulers.
+Math & statistics: probability utils, EWMAs, smoothing, random variables, distributions.
+Testing & verification: property-based, fuzzing, model checking stubs, determinism helpers.
+Utilities & scaffolding: config, feature flags, dependency injection, adapters, error types.
+Provided a concise set of broad categories that can house current and future modules at a higher level than specific techniques.
