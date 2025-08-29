@@ -2,6 +2,31 @@ from typing import Tuple, Any, List, Optional
 import random
 import heapq
 
+# Quadtree implementation for 2D point indexing with payloads.
+#
+# Model
+# - Space is a rectangle with origin at (0,0) and dimensions (width x height).
+# - Each node covers an axis-aligned rectangular region: [x, x+width) x [y, y+height).
+# - Leaves store a list of points (x, y, data) up to max_points.
+# - When a leaf is full and a new point is inserted, it subdivides into 4 quadrants
+#   (BL, BR, TL, TR) and redistributes existing points.
+# - Internal nodes do not store points themselves; only their children do.
+#
+# Coordinates & Boundaries
+# - The right and top edges are exclusive: a point at (width, y) or (x, height) is out of bounds.
+# - Insertion or query outside the root bounds is rejected.
+#
+# Operations
+# - insert(x, y, data): O(log N) average, with N points, causing splits as needed.
+# - delete(x, y): removes all points exactly at (x, y) in the leaf covering the location.
+#   After deletion, it attempts to condense ancestors: if all children are leaves and the
+#   total number of points across them is <= max_points, merge them into the parent leaf.
+# - query(x, y): returns the point list of the leaf covering (x, y) or None if out of bounds.
+#
+# Notes
+# - This quadtree focuses on point-bucket storage by location, not nearest-neighbor search.
+# - The public API uses float inputs for insert; query/delete accept ints (compatible with float).
+
 class Node:
     def __init__(
         self,
@@ -13,19 +38,23 @@ class Node:
         is_leaf: bool = True,
         children: Optional[List['Node']] = None
     ):
+        # Region covered by this node
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        # Points stored at this node (only for leaves)
         self.points: List[Tuple[float, float, Any]] = points or []
         self.is_leaf = is_leaf
+        # Children order: [BL, BR, TL, TR]
         self.children: List[Optional['Node']] = children or [None, None, None, None]  # BL, BR, TL, TR
 
     def contains(self, px: float, py: float) -> bool:
-        # if point lies within the node's "box"
+        # Point is within the node's region (right/top edges are exclusive)
         return (self.x <= px < self.x + self.width) and (self.y <= py < self.y + self.height)
 
     def quadrant(self, px: float, py: float) -> int:
+        # Determine which child quadrant a point belongs to relative to this node
         mx = self.x + self.width / 2.0
         my = self.y + self.height / 2.0
         if py >= my:
@@ -34,6 +63,7 @@ class Node:
             return 0 if px < mx else 1  # BL, BR
 
     def subdivide(self) -> None:
+        # Create four children covering equal subregions and mark this node as internal
         hw = self.width / 2.0
         hh = self.height / 2.0
         bl = Node(self.x,           self.y,           hw, hh)
@@ -45,6 +75,7 @@ class Node:
 
 class Quadtree():
     def __init__(self, width: float, height: float, max_points: int):
+        # Validate and initialize the quadtree root covering [0,width) x [0,height)
         self.validate_inputs(width, height, max_points)
         self.width = float(width)
         self.height = float(height)
@@ -52,6 +83,7 @@ class Quadtree():
         self.root = Node(x=0.0, y=0.0, width=self.width, height=self.height)
 
     def validate_inputs(self, width, height, max_points):
+        # Enforce positive dimensions and a positive integer capacity per leaf
         if not isinstance(max_points, int) or max_points <= 0:
             raise ValueError("Max points must be a positive integer")
         if not (isinstance(width, (int, float)) and width > 0):
@@ -60,6 +92,7 @@ class Quadtree():
             raise ValueError("Height must be a positive number")
 
     def insert(self, x: float, y: float, data: Any = None) -> bool:
+        # Insert a point into the quadtree; returns False if out of bounds
         if not self.root.contains(x, y):
             return False
 
@@ -83,6 +116,10 @@ class Quadtree():
         return True
 
     def delete(self, x: int, y: int):
+        # Remove all points at exactly (x, y) within the leaf covering the coordinate.
+        # Returns True if any point was removed, False otherwise. Performs upward
+        # condensation: if a parent's children are all leaves and their total points fit
+        # in max_points, merges them into the parent leaf.
         if not self.root.contains(x, y):
             return False
 
@@ -120,9 +157,10 @@ class Quadtree():
             else:
                 break
 
-        return True        
+        return True    
 
     def query(self, x: int, y: int):
+        # Return the points stored in the leaf covering (x, y), or None if out of bounds.
         if not self.root.contains(x, y):
             return None
     
@@ -137,7 +175,8 @@ class Quadtree():
         
     @staticmethod
     def build(self, x_origin: float, y_origin: float, width: float, height: float, data_points: List[Tuple[int, int, int]]):
-        # build quad tree from a list of data points
+        # Build a quadtree from a list of (x, y, value) triples and return it.
+        # Note: signature suggests origin usage but current implementation assumes root at (0,0).
         quadtree = Quadtree(x=x_origin, y=y_origin, width=width, height=height)
         for x, y, val in data_points:
             quadtree.insert(x,y, val)
