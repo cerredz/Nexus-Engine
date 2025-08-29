@@ -82,8 +82,45 @@ class Quadtree():
         dfs(self.root, x, y, data)
         return True
 
-    def delete(self, data: Any):
-        pass
+    def delete(self, x: int, y: int):
+        if not self.root.contains(x, y):
+            return False
+
+        path = []
+        node = self.root
+
+        while not node.is_leaf:
+            idx = node.quadrant(x, y)
+            child = node.children[idx] if idx < len(node.children) else None
+            if not child:
+                break
+            path.append((node, idx))
+            node = child
+
+        before = len(node.points)
+        node.points = [(px, py, d) for (px, py, d) in node.points if not (px == x and py == y)]
+        if len(node.points) == before:
+            return False
+
+        while path:
+            parent, _ = path.pop()
+            aggregated = []
+            all_leaves = True
+            for ch in parent.children:
+                if ch is None:
+                    continue
+                if not ch.is_leaf:
+                    all_leaves = False
+                    break
+                aggregated.extend(ch.points)
+            if all_leaves and len(aggregated) <= self.max_points:
+                parent.points = aggregated
+                parent.is_leaf = True
+                parent.children = [None, None, None, None]
+            else:
+                break
+
+        return True        
 
     def query(self, x: int, y: int):
         if not self.root.contains(x, y):
@@ -99,7 +136,11 @@ class Quadtree():
         return node.points
         
     @staticmethod
-    def build(self, data_points: List[tuple]):
+    def build(self, x_origin: float, y_origin: float, width: float, height: float, data_points: List[Tuple[int, int, int]]):
         # build quad tree from a list of data points
-        pass
+        quadtree = Quadtree(x=x_origin, y=y_origin, width=width, height=height)
+        for x, y, val in data_points:
+            quadtree.insert(x,y, val)
+
+        return quadtree
 

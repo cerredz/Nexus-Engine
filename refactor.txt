@@ -1,4 +1,7 @@
 Recommended high-level categories (more general than individual techniques)
+
+
+
 Systems primitives: foundational building blocks used across systems (timers, clocks, hashing, randomness).
 Concurrency & synchronization: locks, semaphores, queues/channels, barriers, atomics.
 Distributed systems & consistency: replication, consensus/ordering, versioning, conflict resolution.

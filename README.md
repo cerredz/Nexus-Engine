@@ -8,3 +8,6 @@ image processing (resize, format conversion, uploads, metadata)
 adjacency matrix, disjoint set union, radix tree
 
 
+patterns to add: deadline propagation, request hedgeing, work queue
+
+
