@@ -55,7 +55,6 @@ def test_timeout_class_calls_sync_fallback_on_timeout():
     result = asyncio.run(wrapped(123))
     assert result is sentinel
 
-
 def test_timeout_class_calls_async_fallback_on_timeout():
     async def fallback(*args, **kwargs):
         return "async-fallback"
