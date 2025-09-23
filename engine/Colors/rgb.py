@@ -51,3 +51,57 @@ def rgb_to_hsv(points: np.ndarray):
 
     return np.stack([h, s, v], axis=-1)
 
+
+def rgb_to_greyscale(points: np.ndarray, key: str = None):
+    """
+        Converts an RGB image (3D NumPy array) to greyscale using various methods.
+
+        Parameters:
+        points (np.ndarray): A 3D array of shape (height, width, 3) where each pixel is an RGB triplet
+                             with values in [0, 255]. The array should be of dtype float or int.
+        key (str, optional): The method to use for greyscale conversion. Options are:
+                             - None (default): Simple average of R, G, B.
+                             - "Luminosity": Weighted average (0.299R + 0.587G + 0.114B).
+                             - "Lightness": Average of the maximum and minimum components.
+                             - "Maximum Component": The maximum of R, G, B.
+
+        Returns:
+        np.ndarray: A 2D array of shape (height, width) with greyscale values in [0, 255].
+
+        Raises:
+        Exception: If input is not a NumPy array, does not have the expected shape (NxMx3),
+                   or if an invalid key is provided.
+
+        Notes:
+        - This is a vectorized implementation using NumPy for efficiency.
+        - Assumes input values are in [0, 255]; output is also in [0, 255].
+        - For empty input arrays, returns an empty 2D array.
+    """
+
+    if not isinstance(points, np.ndarray):
+        raise Exception("Input must be numpy array.")
+
+    if not points.ndim == 3 or not points.shape[-1] == 3:
+        raise Exception("Input must be  (_x_x3). ")
+
+    if points.size == 0:
+        return np.zeros(points.shape, dtype=float)
+
+    r, g, b = points[..., 0], points[..., 1], points[..., 2]
+
+    if not key:
+        greyscale = (r + g + b) / 3
+        return greyscale
+    
+    match key:
+        case "Luminosity":
+            greyscale = (.299 * r + .587 * g + .114 * b)
+        case "Lightness":
+            greyscale = (np.maximum(r, g, b) + np.minimum(r,g, b)) / 2
+        case "Maximum Component":
+            greyscale = np.maximum(r,g, b)
+        case _:
+            raise Exception("Invalid greyscale algorithm key, must either be 'Luminosity', 'Lightness', or 'Maximum Component'")
+
+    return greyscale
+
