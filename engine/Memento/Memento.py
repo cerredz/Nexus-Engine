@@ -3,7 +3,9 @@
 # to maintain encapsulation. State and metadata are retrieved via getter methods that
 # check the requester's type.
 
-from typing import Generic, T, Optional, Any
+from typing import Generic, TypeVar, Optional, Any
+
+T = TypeVar('T')
 
 class Memento(Generic[T]):
     # Initialize with the state to snapshot and optional metadata.

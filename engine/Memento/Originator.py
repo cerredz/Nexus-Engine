@@ -4,15 +4,17 @@
 # Subclasses must implement the edit method to customize state modifications.
 
 from collections import deque
-from curses import meta
-from typing import Any, Generic, T, Optional
+from typing import Any, Generic, TypeVar, Optional
 from abc import ABC, abstractmethod
 from .Memento import Memento
 import copy
 
+T = TypeVar('T')
+
 class Originator(ABC, Generic[T]):
     # Initialize with the initial state.
     def __init__(self, state: T):
+        # Apply edit to the initial state using the setter
         self._state = state
 
     # Property getter for the current state.
@@ -33,7 +35,7 @@ class Originator(ABC, Generic[T]):
 
     # Create a Memento with a deep copy of the current state and optional metadata.
     # Metadata is also deep-copied if provided.
-    def create_memento(self, metadata: Optional[Any]) -> 'Memento[T]':
+    def create_memento(self, metadata: Optional[Any] = None) -> 'Memento[T]':
         from .Memento import Memento  
         state_copy = self._deepcopy_state()
         if metadata:
@@ -44,8 +46,9 @@ class Originator(ABC, Generic[T]):
     # Restore the internal state from a given Memento, validating it's a valid Memento.
     # Accesses the state via the Memento's getter, which checks permissions.
     def restore_from_memento(self, memento: 'Memento[T]'):
-        if not type(memento, Memento):
+        if not isinstance(memento, Memento):
             raise ValueError("Invalid memento")
+        # Restore exact saved state without re-applying edit
         self._state = memento.get_state(self)  
 
     # Internal helper to deep-copy the current state for Memento creation.
