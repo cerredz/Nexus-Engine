@@ -2,6 +2,8 @@ import importlib
 import os
 import sys
 import traceback
+import asyncio
+import inspect
 
 # Ensure project root is on sys.path so tests can import the `engine` package
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -30,7 +32,11 @@ def run_all_tests():
                 continue
 
             for func in test_funcs:
-                func()
+                # Check if function is async
+                if inspect.iscoroutinefunction(func):
+                    asyncio.run(func())
+                else:
+                    func()
 
             print(f"{module_name} PASSED")
             passed += 1
