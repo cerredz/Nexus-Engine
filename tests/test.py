@@ -40,6 +40,7 @@ def run_all_tests():
 
             print(f"{module_name} PASSED")
             passed += 1
+            
         except Exception:
             print(f"{module_name} FAILED")
             traceback.print_exc()
