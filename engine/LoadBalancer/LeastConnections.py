@@ -1,15 +1,13 @@
+from engine.LoadBalancer.LBStrategy import LoadBalancerStrategy
 from .models import Server
 from typing import Dict
 import random
 import aiohttp
 import time
 
-class LeastConnectionsLoadBalancing():
-    def __init__(self, servers: Dict[str, Server], timeout: int):
-        assert isinstance(servers, Dict), "failed to create load balancer, server must be a dict of type Servers"
-        assert len(servers) > 0, "failed to create load balancer, must have at least 1 server for the load balancer"
-        self.servers = servers
-        self.session = aiohttp.ClientSession()
+class LeastConnectionsLoadBalancing(LoadBalancerStrategy):
+    def __init__(self, servers: Dict[str, Server], timeout: int, healthy: float):
+        super().__init__(servers, timeout, healthy)        
 
     def __next__(self):
         # returns the key of the server that is "next"

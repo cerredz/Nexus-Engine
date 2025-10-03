@@ -53,6 +53,17 @@ class WeightedRoundRobin(LoadBalancerStrategy):
         
         raise RuntimeError("Load Balancer Failed. No healthy servers available with capacity.")
 
+    def add_server(self, server_key: str, server: Server):
+        """Add a server dynamically"""
+        assert isinstance(server, Server), "failed to add server, input is not of type Server"
+        
+        # Add to main servers dict
+        self.servers[server_key] = server
+        
+        # Rebuild the weighted structure (simplest approach)
+        self.ordered_servers = self.__build_round_request_data()
+        self.n = len(self.ordered_servers)
+
 
 
             

@@ -21,6 +21,9 @@ class LoadBalancerStrategy(ABC):
         """Strategy-specific logic for selecting the next server"""
         pass
 
+    def add_server(self):
+        pass
+
     def finally_after_request(self, server: Server, elapsed: float, response):
         pass
 

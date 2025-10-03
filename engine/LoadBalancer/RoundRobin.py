@@ -30,6 +30,10 @@ class RoundRobin(LoadBalancerStrategy):
         # No healthy servers found after full rotation
         raise RuntimeError("Load Balancer Failed. No healthy servers available with capacity.")
 
+    def add_server(self, server: Server):
+        assert isinstance(server, Server), "failed to add server, input is not of type Server"
+        self.ordered_servers.append(server)
+        self.n += 1
             
         
             
