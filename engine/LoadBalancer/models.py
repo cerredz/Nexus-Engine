@@ -21,4 +21,8 @@ class Server():
     max_connections: int
     metadata: Metadata
 
+@dataclass
+class WeightedRoundRobinRequests:
+    requests: int # how many requests to send in "round" of round robin
+    request_number: int # current request number we are on in current "round"
 
