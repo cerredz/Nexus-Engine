@@ -1,0 +1,8 @@
+there are diff types of load balancing algorithms:
+
+- round robin
+- sticky round robin
+- weighted round robin
+- ip/url hash
+- least connections
+- least time
