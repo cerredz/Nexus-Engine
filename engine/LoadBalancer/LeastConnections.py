@@ -7,7 +7,7 @@ import time
 
 class LeastConnectionsLoadBalancing(LoadBalancerStrategy):
     def __init__(self, servers: Dict[str, Server], timeout: int, healthy: float):
-        super().__init__(servers, timeout, healthy)        
+        super().__init__(servers, timeout, healthy)    
 
     def __next__(self):
         # returns the key of the server that is "next"
