@@ -6,7 +6,7 @@ def polsby_popper(area: float, perimeter: float):
 
 def reock(area: float, smallest_bounding_circle_area: float):
     if area < 0 or smallest_bounding_circle_area < 0:
-        raise ValueError("area and smallest bounding circle area must be less than 0")
+        raise ValueError("area and smallest bounding circle area must be greater than 0")
     
     return area / smallest_bounding_circle_area
 
@@ -15,4 +15,3 @@ def convex_hull(population: int, population_convex_hull: int):
         raise ValueError("inputs must be positive")
     return population / population_convex_hull
 
-    
